@@ -1,4 +1,3 @@
-//testi
 package gol;
 
 import java.util.LinkedList;
@@ -42,11 +41,12 @@ public class Gol {
             }
         }
 
-        // jos 3, syntyy uusi. Laita solu tarkistusjonoon
+        // jos 3, syntyy uusi. Laita solu muuttuneiden jonoon
         if (nCount == 3 && !area[x][y].isActive()) {
             Cell cell = new Cell(x, y);
             cell.setActive(true);
             changeQueue.add(cell);
+	//ja sen naapurit tarkisjonoon
             for (Cell c : n) {
                 if (!checkQueue.contains(c)) {
                     checkQueue.add(c);
@@ -54,11 +54,12 @@ public class Gol {
             }
         }
 
-        // jos n enemman kuin 3, solu kuolee. Laita solu tarkistusjonoon
+        // jos n enemman kuin 3, solu kuolee. Laita muuttuneiden jonoon
         if (nCount > 3 && area[x][y].isActive()) {
             Cell cell = new Cell(x, y);
             cell.setActive(false);
             changeQueue.add(cell);
+	//ja sen naapurit tarkisjonoon
             for (Cell c : n) {
                 if (!checkQueue.contains(c)) {
                     checkQueue.add(c);
@@ -66,11 +67,12 @@ public class Gol {
             }
         }
 
-        // jos n vahemman kuin 2, solu kuolee sukupuuttoon. Laita solu tarkstusjonoon
+        // jos n vahemman kuin 2, solu kuolee sukupuuttoon. Laita solu muuttuneiden jonoon
         if (nCount < 2 && area[x][y].isActive()) {
             Cell cell = new Cell(x, y);
             cell.setActive(false);
             changeQueue.add(cell);
+	//ja sen naapurit tarkistusjonoon
             for (Cell c : n) {
                 if (!checkQueue.contains(c)) {
                     checkQueue.add(c);
@@ -102,17 +104,15 @@ public class Gol {
     public void generationX() {
         // tarkistus, onko ajettu forstRun
         if (first) {
-            // otetaan talteen jonoon talletettujen maaara
+            // otetaan talteen tarkistusjonoon talletettujen maaara
             int count = checkQueue.size();
 
-            // aja silmukkaa edellisen kierroksen talletettujen maaran verran
+            // aja silmukkaa edellisella kierroksella tarkistusjonoon laitettujen verran
             for (int i = 0; i < count; i++) {
-                // poimi jonosta muuttunut solu
-                Cell cell = changeQueue.removeFirst();
-                // poimi naapurit, aja tarkistukset niille
-                Cell[] cells = getNeighbours(cell.getX(), cell.getY());
-                for (Cell c : cells) {
-                    makeChecks(c.getX(), c.getY());
+                // poimi jonosta tarkistettava solu
+                Cell cell = checkQueue.removeFirst();
+		//aja sille tarkistukset
+		makeChecks(cell.getX(), cell.getY());
                 }
             }
         } else // jos firstRun ei ajettu, aja ensimmaisena generaationa
